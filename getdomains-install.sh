@@ -52,7 +52,7 @@ add_tunnel() {
     echo "We can automatically configure only Wireguard. OpenVPN, Sing-box(Shadowsocks2022, VMess, VLESS, etc) and tun2socks will need to be configured manually"
     echo "Select a tunnel:"
     echo "1) WireGuard"
-	echo "2) Existing WireGuard (interface name must be 'wg0', and firewall zone must be configured)"	
+    echo "2) Existing WireGuard (interface name must be 'wg0', and firewall zone must be configured)"	
     echo "3) OpenVPN"
     echo "4) Sing-box"
     echo "5) tun2socks"
@@ -67,7 +67,7 @@ add_tunnel() {
             break
             ;;
 			
-		2) 
+	2) 
             TUNNEL=wg_ex
             break
             ;;
