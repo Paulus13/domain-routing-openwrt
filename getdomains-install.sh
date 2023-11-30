@@ -7,6 +7,16 @@ check_repo() {
     opkg update | grep -q "Failed to download" && printf "\033[32;1mopkg failed. Check internet or date. Command for force ntp sync: ntpd -p ptbtime1.ptb.de\033[0m\n" && exit 1
 }
 
+check_inet() {
+printf "\033[32;1mChecking Internet connection...\033[0m\n"
+p_loss=$(ping -w 3 8.8.8.8 | grep 'packet loss' | cut -d ' ' -f 7 | sed 's/%//')
+
+if [ $p_loss -eq 100 ]; then
+	printf "\033[32;1mInternet check failed.\033[0m\n"
+	exit 1
+fi
+}
+
 route_vpn () {
     if [ "$TUNNEL" == wg ]; then
 cat << EOF > /etc/hotplug.d/iface/30-rknroute
@@ -42,10 +52,11 @@ add_tunnel() {
     echo "We can automatically configure only Wireguard. OpenVPN, Sing-box(Shadowsocks2022, VMess, VLESS, etc) and tun2socks will need to be configured manually"
     echo "Select a tunnel:"
     echo "1) WireGuard"
-    echo "2) OpenVPN"
-    echo "3) Sing-box"
-    echo "4) tun2socks"
-    echo "5) Skip this step"
+	echo "2) Existing WireGuard (interface name must be 'wg0', and firewall zone must be configured)"	
+    echo "3) OpenVPN"
+    echo "4) Sing-box"
+    echo "5) tun2socks"
+    echo "6) Skip this step"
 
     while true; do
     read -r -p '' TUNNEL
@@ -55,23 +66,28 @@ add_tunnel() {
             TUNNEL=wg
             break
             ;;
+			
+		2) 
+            TUNNEL=wg_ex
+            break
+            ;;
 
-        2)
+        3)
             TUNNEL=ovpn
             break
             ;;
 
-        3) 
+        4) 
             TUNNEL=singbox
             break
             ;;
 
-        4) 
+        5) 
             TUNNEL=tun2socks
             break
             ;;
 
-        5)
+        6)
             echo "Skip"
             TUNNEL=0
             break
@@ -83,6 +99,12 @@ add_tunnel() {
         esac
     done
 
+    if [ "$TUNNEL" == 'wg_ex' ]; then
+		TUNNEL=wg
+		route_vpn
+		TUNNEL=0
+	fi
+	
     if [ "$TUNNEL" == 'wg' ]; then
         printf "\033[32;1mConfigure WireGuard\033[0m\n"
         if opkg list-installed | grep -q wireguard-tools; then
@@ -552,6 +574,20 @@ EOF
     fi
 }
 
+check_sysupgrade() {
+if ! cat /etc/sysupgrade.conf | grep -q 30-rknroute; then
+	echo '/etc/hotplug.d/iface/30-rknroute' >> /etc/sysupgrade.conf
+fi
+
+if ! cat /etc/sysupgrade.conf | grep -q getdomains; then
+	echo '/etc/init.d/getdomains' >> /etc/sysupgrade.conf
+	echo '/etc/rc.d/S99getdomains' >> /etc/sysupgrade.conf
+	printf "\033[32;1mSysupgrade file now updated\033[0m\n"
+else
+	printf "\033[32;1mSysupgrade file already updated\033[0m\n"
+fi
+}
+
 # System Details
 MODEL=$(grep machine /proc/cpuinfo | cut -d ':' -f 2)
 RELEASE=$(grep OPENWRT_RELEASE /etc/os-release | awk -F '"' '{print $2}')
@@ -570,7 +606,8 @@ fi
 
 printf "\033[31;1mAll actions performed here cannot be rolled back automatically.\033[0m\n"
 
-check_repo
+#check_repo
+check_inet
 
 add_packages
 
@@ -589,6 +626,8 @@ dnsmasqfull
 add_dns_resolver
 
 add_getdomains
+
+check_sysupgrade
 
 printf "\033[32;1mRestart network\033[0m\n"
 /etc/init.d/network restart
