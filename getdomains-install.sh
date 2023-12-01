@@ -9,7 +9,7 @@ check_repo() {
 
 check_inet() {
 printf "\033[32;1mChecking Internet connection...\033[0m\n"
-p_loss=$(ping -w 3 8.8.8.8 | grep 'packet loss' | cut -d ' ' -f 7 | sed 's/%//')
+p_loss=$(ping -qw 3 8.8.8.8 | grep 'packet loss' | cut -d ' ' -f 7 | sed 's/%//')
 
 if [ $p_loss -eq 100 ]; then
 	printf "\033[32;1mInternet check failed.\033[0m\n"
