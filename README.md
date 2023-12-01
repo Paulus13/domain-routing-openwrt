@@ -10,7 +10,7 @@ Shell скрипт и playbook для Ansible. Автоматизируют на
 ```
 sh <(wget -O - https://raw.githubusercontent.com/itdoginfo/ansible-openwrt-hirkn/master/getdomains-install.sh)
 ```
-или
+или модифицированная версия
 ```
 sh <(wget -O - https://raw.githubusercontent.com/Paulus13/ansible-openwrt-hirkn/master/getdomains-install.sh)
 ```
@@ -19,7 +19,7 @@ sh <(wget -O - https://raw.githubusercontent.com/Paulus13/ansible-openwrt-hirkn/
 ```
 wget https://raw.githubusercontent.com/itdoginfo/ansible-openwrt-hirkn/master/getdomains-install.sh && sh getdomains-install.sh
 ```
-или
+или модифицированная версия
 ```
 wget https://raw.githubusercontent.com/Paulus13/ansible-openwrt-hirkn/master/getdomains-install.sh && sh getdomains-install.sh
 ```
