@@ -472,12 +472,12 @@ add_packages() {
         opkg install curl
     fi
 
-    if opkg list-installed | grep -q nano; then
-        printf "\033[32;1mNano already installed\033[0m\n"
-    else
-        printf "\033[32;1mInstall nano\033[0m\n"
-        opkg install nano
-    fi
+    # if opkg list-installed | grep -q nano; then
+        # printf "\033[32;1mNano already installed\033[0m\n"
+    # else
+        # printf "\033[32;1mInstall nano\033[0m\n"
+        # opkg install nano
+    # fi
 }
 
 add_getdomains() {
