@@ -3,7 +3,7 @@ Shell скрипт и playbook для Ansible. Автоматизируют на
 
 Полное описание происходящего: [Статья на хабре](https://habr.com/ru/articles/767464/)
 
-[Копия в моём блоге](https://itdog.info/tochechnyj-obhod-blokirovok-po-domenam-na-routere-s-openwrt/)
+[Копия в блоге автора скрипта](https://itdog.info/tochechnyj-obhod-blokirovok-po-domenam-na-routere-s-openwrt/)
 
 ## Скрипт для установки
 Запуск без скачивания
