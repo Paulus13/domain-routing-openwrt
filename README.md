@@ -13,7 +13,7 @@ Shell скрипт и playbook для Ansible. Автоматизируют на
 [Копия в блоге автора скрипта](https://itdog.info/tochechnyj-obhod-blokirovok-po-domenam-na-routere-s-openwrt/)
 
 ## Скрипт для установки
-Запуск без скачивания
+Запуск без скачивания оригинального скрипта
 ```
 sh <(wget -O - https://raw.githubusercontent.com/itdoginfo/ansible-openwrt-hirkn/master/getdomains-install.sh)
 ```
@@ -22,7 +22,7 @@ sh <(wget -O - https://raw.githubusercontent.com/itdoginfo/ansible-openwrt-hirkn
 sh <(wget -O - https://raw.githubusercontent.com/Paulus13/ansible-openwrt-hirkn/master/getdomains-install.sh)
 ```
 
-Запуск со скачиванием
+Запуск со скачиванием оригинального скрипта
 ```
 wget https://raw.githubusercontent.com/itdoginfo/ansible-openwrt-hirkn/master/getdomains-install.sh && sh getdomains-install.sh
 ```
