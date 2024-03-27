@@ -19,13 +19,13 @@ fi
 
 route_vpn () {
     if [ "$TUNNEL" == wg ]; then
-cat << EOF > /etc/hotplug.d/iface/30-rknroute
+cat << EOF > /etc/hotplug.d/iface/30-vpnroute
 #!/bin/sh
 
 ip route add table vpn default dev wg0
 EOF
     elif [ "$TUNNEL" == singbox ] || [ "$TUNNEL" == ovpn ] || [ "$TUNNEL" == tun2socks ]; then
-cat << EOF > /etc/hotplug.d/iface/30-rknroute
+cat << EOF > /etc/hotplug.d/iface/30-vpnroute
 #!/bin/sh
 
 sleep 5
@@ -129,9 +129,9 @@ add_tunnel() {
 
         read -r -p "Enter the public key (from [Peer]):"$'\n' WG_PUBLIC_KEY
         read -r -p "If use PresharedKey, Enter this (from [Peer]). If your don't use leave blank:"$'\n' WG_PRESHARED_KEY
-        read -r -p "Enter Enpoint host without port (Domain or IP) (from [Peer]):"$'\n' WG_ENDPOINT
+        read -r -p "Enter Endpoint host without port (Domain or IP) (from [Peer]):"$'\n' WG_ENDPOINT
 
-        read -r -p "Enter Enpoint host port (from [Peer]) [51820]:"$'\n' WG_ENDPOINT_PORT
+        read -r -p "Enter Endpoint host port (from [Peer]) [51820]:"$'\n' WG_ENDPOINT_PORT
         WG_ENDPOINT_PORT=${WG_ENDPOINT_PORT:-51820}
         if [ "$WG_ENDPOINT_PORT" = '51820' ]; then
             echo $WG_ENDPOINT_PORT
@@ -575,8 +575,8 @@ EOF
 }
 
 check_sysupgrade() {
-if ! cat /etc/sysupgrade.conf | grep -q 30-rknroute; then
-	echo '/etc/hotplug.d/iface/30-rknroute' >> /etc/sysupgrade.conf
+if ! cat /etc/sysupgrade.conf | grep -q 30-vpnroute; then
+	echo '/etc/hotplug.d/iface/30-vpnroute' >> /etc/sysupgrade.conf
 fi
 
 if ! cat /etc/sysupgrade.conf | grep -q getdomains; then
@@ -599,8 +599,8 @@ VERSION_ID=$(grep VERSION_ID /etc/os-release | awk -F '"' '{print $2}' | awk -F.
 if [ "$VERSION_ID" -ne 23 ]; then
     printf "\033[31;1mScript only support OpenWrt 23.05\033[0m\n"
     echo "For OpenWrt 21.02 and 22.03 you can:"
-    echo "1) Use ansible https://github.com/itdoginfo/ansible-openwrt-hirkn"
-    echo "2) Configure manually. Old manual: https://itdog.info/tochechnyj-obhod-blokirovok-rkn-na-routere-s-openwrt-s-pomoshhyu-wireguard-i-dnscrypt/"
+    echo "1) Use ansible https://github.com/itdoginfo/domain-routing-openwrt"
+    echo "2) Configure manually. Old manual: https://itdog.info/tochechnaya-marshrutizaciya-na-routere-s-openwrt-wireguard-i-dnscrypt/"
     exit 1
 fi
 
