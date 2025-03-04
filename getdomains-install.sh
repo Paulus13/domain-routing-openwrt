@@ -606,8 +606,10 @@ if [ "$VERSION_ID" -lt 23 ]; then
 fi
 
 if [ "$VERSION_ID_FULL" = "24.10.0" ]; then
-	uci set dhcp.@dnsmasq[0].confdir='/tmp/dnsmasq.d'
-	uci commit
+	if [ ! -d /tmp/dnsmasq.d ]; then
+		uci set dhcp.@dnsmasq[0].confdir='/tmp/dnsmasq.d'
+		uci commit
+	fi
 fi
 
 printf "\033[31;1mAll actions performed here cannot be rolled back automatically.\033[0m\n"
